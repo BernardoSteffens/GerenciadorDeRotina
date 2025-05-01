@@ -43,11 +43,11 @@ public class ControllerTelaPrincipal {
     }
     
     public void atualizarTarefasDoDia(){
-        String tarefas = gerarTarefasDoDia();
+        List<TarefaDiaria> tarefas = gerarTarefasDoDia();
         telaPrincipal.atualizarTarefasDoDia(tarefas);
     }
     
-    public String gerarTarefasDoDia(){
+    public List<TarefaDiaria> gerarTarefasDoDia(){
         List<TarefaDiaria> tarefas = new ArrayList<>();
         TarefaDiariaDAO tarefaDiariaDAO = new TarefaDiariaDAO();
         
@@ -56,14 +56,7 @@ public class ControllerTelaPrincipal {
         } catch (SQLException ex) {
             Logger.getLogger(ControllerTelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
-        String teste = "<html>";
         
-        for(TarefaDiaria tarefa : tarefas){
-            teste += tarefa.getTitulo() + "<br>";
-        }
-        
-        teste += "</html>";
-        
-        return teste;
+        return tarefas;
     }
 }

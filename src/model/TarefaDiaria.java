@@ -133,11 +133,6 @@ public class TarefaDiaria {
 
     @Override
     public String toString() {
-        return "TarefaDiaria{" +
-            "id=" + id +
-            ", titulo='" + titulo + '\'' +
-            ", data=" + data +
-            ", concluida=" + concluida +
-            '}';    
+        return titulo;   
     }
 }

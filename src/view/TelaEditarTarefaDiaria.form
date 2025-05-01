@@ -61,7 +61,7 @@
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
-                          <Component id="btnAdicionar" min="-2" pref="127" max="-2" attributes="0"/>
+                          <Component id="btnSalvar" min="-2" pref="127" max="-2" attributes="0"/>
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" attributes="0">
@@ -106,7 +106,7 @@
                       <Component id="spnPrioridade" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace pref="41" max="32767" attributes="0"/>
-                  <Component id="btnAdicionar" min="-2" pref="42" max="-2" attributes="0"/>
+                  <Component id="btnSalvar" min="-2" pref="42" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -126,7 +126,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="24" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Adicionar Tarefa di&#xe1;ria"/>
+            <Property name="text" type="java.lang.String" value="Editar Tarefa di&#xe1;ria"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="txfTitulo">
@@ -170,12 +170,12 @@
             </Property>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="btnAdicionar">
+        <Component class="javax.swing.JButton" name="btnSalvar">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Adicionar"/>
+            <Property name="text" type="java.lang.String" value="Salvar"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAdicionarActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSalvarActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JSpinner" name="txfData">

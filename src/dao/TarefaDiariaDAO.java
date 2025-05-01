@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package dao;
 
 import java.text.SimpleDateFormat;
@@ -254,15 +250,40 @@ public class TarefaDiariaDAO {
         }
     }
     
-    public List<TarefaDiaria> buscarPorTituloEData(String titulo, String data) throws SQLException {
-        String sql = "SELECT * FROM tarefas_diarias WHERE titulo LIKE ? AND data = ? ORDER BY hora_inicio";
+    public List<TarefaDiaria> buscarPorFiltros(String titulo, String data, int prioridade, int concluida) throws SQLException {
+         
+        StringBuilder sql = new StringBuilder("SELECT * FROM tarefas_diarias WHERE 1=1");
+        List<String> parametros = new ArrayList<>();
+
+        if (titulo != null && !titulo.trim().isEmpty()) {
+            sql.append(" AND titulo LIKE ?");
+            parametros.add("%" + titulo + "%");
+        }
+
+        if (data != null && !data.trim().isEmpty()) {
+            sql.append(" AND data = ?");
+            parametros.add(data);
+        }
+
+        if (prioridade != 0) {
+            sql.append(" AND prioridade = ?");
+            parametros.add(Integer.toString(prioridade));
+        }
+
+        if (concluida != -1) {
+            sql.append(" AND concluida = ?");
+            parametros.add(Integer.toString(concluida));
+        }
+
+        sql.append(" ORDER BY hora_inicio");
 
         Connection conn = ConexaoDB.getConexao();
-        PreparedStatement stmt = conn.prepareStatement(sql);
+        PreparedStatement stmt = conn.prepareStatement(sql.toString());
 
-        stmt.setString(1, "%" + titulo + "%");
-        stmt.setString(2, data);
-
+        for (int i = 0; i < parametros.size(); i++) {
+            stmt.setString(i + 1, parametros.get(i));
+        }
+        
         ResultSet rs = stmt.executeQuery();
         List<TarefaDiaria> lista = new ArrayList<>();
 
@@ -272,8 +293,9 @@ public class TarefaDiariaDAO {
 
         rs.close();
         stmt.close();
-    return lista;
-}
+        return lista;
+    }
+
     
     private TarefaDiaria criarTarefaDiariaDoResultSet(ResultSet rs) throws SQLException {
         TarefaDiaria tarefa = new TarefaDiaria();
