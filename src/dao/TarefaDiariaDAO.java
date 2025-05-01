@@ -17,7 +17,7 @@ import java.text.SimpleDateFormat;
  * @author Bernardo
  */
 public class TarefaDiariaDAO {
-    
+
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     
     public boolean inserir(TarefaDiaria tarefa) throws SQLException {
@@ -34,7 +34,7 @@ public class TarefaDiariaDAO {
             
             stmt.setString(1, tarefa.getTitulo());
             stmt.setString(2, tarefa.getDescricao());
-            stmt.setString(3, dateFormat.format(tarefa.getData()));
+            stmt.setString(3, tarefa.getData());
             stmt.setString(4, tarefa.getHoraInicio());
             stmt.setString(5, tarefa.getHoraFim());
             stmt.setInt(6, tarefa.getPrioridade());
@@ -91,7 +91,7 @@ public class TarefaDiariaDAO {
             
             stmt.setString(1, tarefa.getTitulo());
             stmt.setString(2, tarefa.getDescricao());
-            stmt.setString(3, dateFormat.format(tarefa.getData()));
+            stmt.setString(3, tarefa.getData());
             stmt.setString(4, tarefa.getHoraInicio());
             stmt.setString(5, tarefa.getHoraFim());
             stmt.setInt(6, tarefa.getPrioridade());
@@ -186,7 +186,7 @@ public class TarefaDiariaDAO {
         }
     }
     
-    public List<TarefaDiaria> buscarPorData(Date data) throws SQLException {
+    public List<TarefaDiaria> buscarPorData(String data) throws SQLException {
         String sql = "SELECT * FROM tarefas_diarias WHERE data = ? ORDER BY hora_inicio";
         
         Connection conn = null;
@@ -197,7 +197,7 @@ public class TarefaDiariaDAO {
             conn = ConexaoDB.getConexao();
             stmt = conn.prepareStatement(sql);
             
-            stmt.setString(1, dateFormat.format(data));
+            stmt.setString(1, data);
             
             rs = stmt.executeQuery();
             
@@ -254,18 +254,34 @@ public class TarefaDiariaDAO {
         }
     }
     
+    public List<TarefaDiaria> buscarPorTituloEData(String titulo, String data) throws SQLException {
+        String sql = "SELECT * FROM tarefas_diarias WHERE titulo LIKE ? AND data = ? ORDER BY hora_inicio";
+
+        Connection conn = ConexaoDB.getConexao();
+        PreparedStatement stmt = conn.prepareStatement(sql);
+
+        stmt.setString(1, "%" + titulo + "%");
+        stmt.setString(2, data);
+
+        ResultSet rs = stmt.executeQuery();
+        List<TarefaDiaria> lista = new ArrayList<>();
+
+        while (rs.next()) {
+            lista.add(criarTarefaDiariaDoResultSet(rs));
+        }
+
+        rs.close();
+        stmt.close();
+    return lista;
+}
+    
     private TarefaDiaria criarTarefaDiariaDoResultSet(ResultSet rs) throws SQLException {
         TarefaDiaria tarefa = new TarefaDiaria();
         
         tarefa.setId(rs.getInt("id"));
         tarefa.setTitulo(rs.getString("titulo"));
         tarefa.setDescricao(rs.getString("descricao"));
-        
-        try {
-            tarefa.setData(dateFormat.parse(rs.getString("data")));
-        } catch (Exception e) {
-            tarefa.setData(new Date());
-        }
+        tarefa.setData(rs.getString("data"));
         
         tarefa.setHoraInicio(rs.getString("hora_inicio"));
         tarefa.setHoraFim(rs.getString("hora_fim"));

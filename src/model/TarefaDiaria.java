@@ -15,10 +15,10 @@ public class TarefaDiaria {
     private int id;
     private String titulo;
     private String descricao;
-    private Date data;
+    private String data;
     private String horaInicio;
     private String horaFim;
-    private int prioridade; // 1 (baixa) a 5 (alta)
+    private int prioridade;
     private boolean concluida;
     private int categoriaId;
     private int tarefaSemanalId;
@@ -26,12 +26,20 @@ public class TarefaDiaria {
     public TarefaDiaria() {
     }
 
-    public TarefaDiaria(String titulo, Date data) {
+    public TarefaDiaria(String titulo, String data) {
         this.titulo = titulo;
         this.data = data;
     }
 
-    public TarefaDiaria(String titulo, String descricao, Date data, String horaInicio, String horaFim, int prioridade, boolean concluida, int categoriaId, int tarefaSemanalId) {
+    public TarefaDiaria(String titulo, String descricao, String data, int prioridade, String horaInicio) {
+        this.titulo = titulo;
+        this.descricao = descricao;
+        this.data = data;
+        this.prioridade = prioridade;
+        this.horaInicio = horaInicio;
+    }
+    
+    public TarefaDiaria(String titulo, String descricao, String data, String horaInicio, String horaFim, int prioridade, boolean concluida, int categoriaId, int tarefaSemanalId) {
         this.titulo = titulo;
         this.descricao = descricao;
         this.data = data;
@@ -67,11 +75,11 @@ public class TarefaDiaria {
         this.descricao = descricao;
     }
 
-    public Date getData() {
+    public String getData() {
         return data;
     }
 
-    public void setData(Date data) {
+    public void setData(String data) {
         this.data = data;
     }
 

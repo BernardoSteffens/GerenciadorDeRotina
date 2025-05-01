@@ -38,13 +38,15 @@ public class TarefaSemanal {
         this.categoriaId = categoriaId;
         this.objetivoId = objetivoId;
     }
-
-    
     
     public int getId() {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+    
     public String getTitulo() {
         return titulo;
     }
