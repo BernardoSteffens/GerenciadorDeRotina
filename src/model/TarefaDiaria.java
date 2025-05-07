@@ -39,6 +39,15 @@ public class TarefaDiaria {
         this.horaInicio = horaInicio;
     }
     
+    public TarefaDiaria(int id, String titulo, String descricao, String data, int prioridade, String horaInicio) {
+        this.id = id;
+        this.titulo = titulo;
+        this.descricao = descricao;
+        this.data = data;
+        this.prioridade = prioridade;
+        this.horaInicio = horaInicio;
+    }
+    
     public TarefaDiaria(String titulo, String descricao, String data, String horaInicio, String horaFim, int prioridade, boolean concluida, int categoriaId, int tarefaSemanalId) {
         this.titulo = titulo;
         this.descricao = descricao;
@@ -50,7 +59,7 @@ public class TarefaDiaria {
         this.categoriaId = categoriaId;
         this.tarefaSemanalId = tarefaSemanalId;
     }
-    
+
     public int getId() {
         return id;
     }

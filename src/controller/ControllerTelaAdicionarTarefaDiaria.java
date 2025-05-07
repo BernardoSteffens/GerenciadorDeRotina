@@ -42,6 +42,10 @@ public class ControllerTelaAdicionarTarefaDiaria {
             Logger.getLogger(ControllerTelaAdicionarTarefaDiaria.class.getName()).log(Level.SEVERE, null, ex);
         }
         controllerTelaPrincipal.atualizarTarefasDoDia();
+        ControllerTelaTarefaDiaria.atualizarPesquisa();
     }
     
+    public void atualizarPesquisa(){
+        
+    }
 }

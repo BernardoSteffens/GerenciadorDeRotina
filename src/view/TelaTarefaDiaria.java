@@ -5,13 +5,10 @@
 package view;
 
 import controller.ControllerTelaTarefaDiaria;
-import dao.TarefaDiariaDAO;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import model.TarefaDiaria;
 
@@ -22,7 +19,6 @@ import model.TarefaDiaria;
 public class TelaTarefaDiaria extends javax.swing.JFrame {
     
     private ControllerTelaTarefaDiaria controller = new ControllerTelaTarefaDiaria(this);
-    private int checkConcluida = 0;
     private List<TarefaDiaria> tarefas;
 
     
@@ -36,10 +32,40 @@ public class TelaTarefaDiaria extends javax.swing.JFrame {
         DefaultTableModel modelo = new DefaultTableModel(new Object[]{"Título", "Descrição", "Data", "Horario de Inicio", "Prioridade", "Concluida"},0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false;
+                return column == 5;
+            }
+            
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                switch (columnIndex) {
+                    case 4:
+                        return Integer.class;
+                    case 5:
+                        return Boolean.class;
+                    default:
+                        return String.class;
+                }
             }
         };
+        
+        modelo.addTableModelListener(new TableModelListener(){
+            
+            public void tableChanged(TableModelEvent e){
+                int row = e.getFirstRow();
+                int column = e.getColumn();
+                
+                if (column == 5 && e.getType() == TableModelEvent.UPDATE) {
+                    Boolean concluida = (Boolean) modelo.getValueAt(row, column);
+                    int linhaSelecionada = tblResultados.getSelectedRow();
+                    
+                    TarefaDiaria tarefaAlterada = tarefas.get(linhaSelecionada);
+                    ControllerTelaTarefaDiaria.atualizarConcluidaTarefa(tarefaAlterada, concluida);
+                }
+            }
+        });
+        
         tblResultados.setModel(modelo);
+        btnPesquisar.doClick();
     }
 
     @SuppressWarnings("unchecked")
@@ -55,8 +81,9 @@ public class TelaTarefaDiaria extends javax.swing.JFrame {
         txfTitulo = new javax.swing.JTextField();
         spnData = new javax.swing.JSpinner();
         spnPrioridade = new javax.swing.JSpinner();
-        chConcluida = new javax.swing.JCheckBox();
         btnLimpar = new javax.swing.JButton();
+        cbConcluida = new javax.swing.JComboBox<>();
+        jLabel5 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblResultados = new javax.swing.JTable();
@@ -94,14 +121,6 @@ public class TelaTarefaDiaria extends javax.swing.JFrame {
 
         spnPrioridade.setModel(new javax.swing.SpinnerNumberModel(0, 0, 5, 1));
 
-        chConcluida.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        chConcluida.setText("Concluida?");
-        chConcluida.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                chConcluidaActionPerformed(evt);
-            }
-        });
-
         btnLimpar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnLimpar.setText("Limpar");
         btnLimpar.addActionListener(new java.awt.event.ActionListener() {
@@ -109,6 +128,11 @@ public class TelaTarefaDiaria extends javax.swing.JFrame {
                 btnLimparActionPerformed(evt);
             }
         });
+
+        cbConcluida.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ambos", "Concluídas", "Não Concluídas" }));
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel5.setText("Concluída?");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -127,14 +151,13 @@ public class TelaTarefaDiaria extends javax.swing.JFrame {
                         .addComponent(spnData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(chConcluida)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(spnPrioridade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 311, Short.MAX_VALUE)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(spnPrioridade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbConcluida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 256, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnLimpar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnPesquisar, javax.swing.GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE))
@@ -155,7 +178,8 @@ public class TelaTarefaDiaria extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
                             .addComponent(spnData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(chConcluida))
+                            .addComponent(cbConcluida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5))
                         .addGap(33, 33, 33))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -168,11 +192,11 @@ public class TelaTarefaDiaria extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Titulo", "Descricao", "Data", "Prioridade", "Concluida"
+                "Titulo", "Descricao", "Data", "Horario de Inicio","Prioridade", "Concluida"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Boolean.class
+                String.class, String.class, String.class, String.class, Integer.class, Boolean.class
             };
 
             @Override
@@ -182,7 +206,7 @@ public class TelaTarefaDiaria extends javax.swing.JFrame {
 
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; // impede edição de todas as células
+                return column == 5;
             }
         });
         tblResultados.setToolTipText("");
@@ -285,24 +309,36 @@ public class TelaTarefaDiaria extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+        int linhaSelecionada = tblResultados.getSelectedRow();
         
+        if(linhaSelecionada != -1){
+            TarefaDiaria tarefaSelecionada = tarefas.get(linhaSelecionada);
+            ControllerTelaTarefaDiaria.apagarTarefaSelecionada(tarefaSelecionada);
+        }
     }//GEN-LAST:event_btnExcluirActionPerformed
 
     private void btnPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarActionPerformed
         String titulo = null;
         String data = null;
         int prioridade = -1;
-        int concluida = -1;
+        int concluida;
         
         titulo = txfTitulo.getText().trim();
         SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
         data = formato.format(spnData.getValue());
         prioridade = (int) spnPrioridade.getValue();
         
-        if(checkConcluida == 1){
-            concluida = chConcluida.isSelected() ? 1 : 0;
-        }        
-        
+        switch(cbConcluida.getSelectedIndex()){
+            case 1: 
+                concluida = 1;
+                break;
+            case 2: 
+                concluida = 0;
+                break;
+            default:
+                concluida = -1;
+                break;
+        }
         
         tarefas = controller.pesquisar(titulo, data, prioridade, concluida);
             
@@ -321,16 +357,12 @@ public class TelaTarefaDiaria extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnPesquisarActionPerformed
 
-    private void chConcluidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chConcluidaActionPerformed
-        checkConcluida = 1;
-    }//GEN-LAST:event_chConcluidaActionPerformed
-
     private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
         txfTitulo.setText("");
         spnData.setValue(new java.util.Date());
         spnPrioridade.setValue(0);
-        chConcluida.setSelected(false);
-        checkConcluida = 0;
+        cbConcluida.setSelectedIndex(0);
+        btnPesquisar.doClick();
     }//GEN-LAST:event_btnLimparActionPerformed
 
     private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
@@ -344,14 +376,16 @@ public class TelaTarefaDiaria extends javax.swing.JFrame {
             TarefaDiaria tarefaSelecionada = tarefas.get(linhaSelecionada);
             ControllerTelaTarefaDiaria.abrirTelaEditarTarefaDiaria(tarefaSelecionada);
         }
-        
-        
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
         ControllerTelaTarefaDiaria.abrirTelaPrincipal();
         this.dispose();
     }//GEN-LAST:event_btnVoltarActionPerformed
+    
+    public void atualizarPesquisa(){
+        btnPesquisar.doClick();
+    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdicionar;
@@ -360,11 +394,12 @@ public class TelaTarefaDiaria extends javax.swing.JFrame {
     private javax.swing.JButton btnLimpar;
     private javax.swing.JButton btnPesquisar;
     private javax.swing.JButton btnVoltar;
-    private javax.swing.JCheckBox chConcluida;
+    private javax.swing.JComboBox<String> cbConcluida;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;

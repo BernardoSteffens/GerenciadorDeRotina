@@ -5,6 +5,7 @@
 package view;
 
 import controller.ControllerTelaAdicionarTarefaDiaria;
+import controller.ControllerTelaTarefaDiaria;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 

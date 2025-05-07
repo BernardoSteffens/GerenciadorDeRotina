@@ -7,16 +7,12 @@ package controller;
 import dao.TarefaDiariaDAO;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import static java.time.temporal.TemporalQueries.localDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.TarefaDiaria;
-import view.TelaAdicionarTarefaDiaria;
 import view.TelaPrincipal;
 
 /**
@@ -24,6 +20,7 @@ import view.TelaPrincipal;
  * @author Bernardo
  */
 public class ControllerTelaPrincipal {
+
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private static TelaPrincipal telaPrincipal;
 
@@ -38,6 +35,17 @@ public class ControllerTelaPrincipal {
         this.telaPrincipal = telaPrincipal;
     }
     
+    public static void atualizarConcluidaTarefa(TarefaDiaria tarefaAlterada, boolean estadoConcluida){
+        TarefaDiariaDAO dao = new TarefaDiariaDAO();
+        tarefaAlterada.setConcluida(estadoConcluida);
+        
+        try {
+            dao.atualizar(tarefaAlterada);
+        } catch (SQLException ex) {
+            Logger.getLogger(ControllerTelaTarefaDiaria.class.getName()).log(Level.SEVERE, null, ex);
+        }     
+    }
+
     public void atualizarDataDeHoje(){
         telaPrincipal.atualizarDataDeHoje(data);
     }

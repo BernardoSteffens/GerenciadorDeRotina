@@ -7,6 +7,7 @@ package controller;
 import dao.TarefaDiariaDAO;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.TarefaDiaria;
@@ -22,6 +23,33 @@ import view.TelaTarefaDiaria;
 public class ControllerTelaTarefaDiaria {
     
     private static TelaTarefaDiaria tela = new TelaTarefaDiaria();
+    
+    public static void apagarTarefaSelecionada(TarefaDiaria tarefaSelecionada) {
+        int id = tarefaSelecionada.getId();
+        ControllerTelaPrincipal controllerTelaPrincipal = new ControllerTelaPrincipal();
+        TarefaDiariaDAO dao = new TarefaDiariaDAO();
+        
+        try {
+            dao.deletar(id);
+        } catch (SQLException ex) {
+            Logger.getLogger(ControllerTelaTarefaDiaria.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        controllerTelaPrincipal.atualizarTarefasDoDia();
+        ControllerTelaTarefaDiaria.atualizarPesquisa();
+    }
+    
+    public static void atualizarConcluidaTarefa(TarefaDiaria tarefaAlterada, boolean estadoConcluida){
+        TarefaDiariaDAO dao = new TarefaDiariaDAO();
+        tarefaAlterada.setConcluida(estadoConcluida);
+        
+        try {
+            dao.atualizar(tarefaAlterada);
+        } catch (SQLException ex) {
+            Logger.getLogger(ControllerTelaTarefaDiaria.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
 
     private TarefaDiariaDAO dao = new TarefaDiariaDAO();
     
@@ -29,6 +57,10 @@ public class ControllerTelaTarefaDiaria {
         this.tela = tela;
     }
 
+   public static void atualizarPesquisa(){
+       tela.atualizarPesquisa();
+   }
+    
     public List<TarefaDiaria> pesquisar(String titulo, String data, int prioridade, int concluida){
         
         List<TarefaDiaria> tarefas = null;
