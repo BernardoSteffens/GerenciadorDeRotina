@@ -61,15 +61,21 @@ public class ConexaoDB {
                     "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "titulo TEXT NOT NULL, " +
                     "descricao TEXT, " +
-                    "dia_semana INTEGER NOT NULL, " +
-                    "semana_ano TEXT NOT NULL, " +
                     "prioridade INTEGER DEFAULT 0, " +
                     "concluida INTEGER DEFAULT 0, " +
                     "categoria_id INTEGER, " +
                     "objetivo_id INTEGER, " +
+                    "semana_id INTEGER," +
                     "FOREIGN KEY (categoria_id) REFERENCES categorias (id), " +
                     "FOREIGN KEY (objetivo_id) REFERENCES objetivos_trimestrais (id)" +
                     ")");
+            
+            stmt.execute("CREATE TABLE IF NOT EXISTS semanas (" +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "dia_comeco TEXT NOT NULL, " +
+                    "dia_fim TEXT NOT NULL " +
+                    ")"
+            );
             
             stmt.execute("CREATE TABLE IF NOT EXISTS tarefas_diarias (" +
                     "id INTEGER PRIMARY KEY AUTOINCREMENT, " +

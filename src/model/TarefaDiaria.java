@@ -39,13 +39,14 @@ public class TarefaDiaria {
         this.horaInicio = horaInicio;
     }
     
-    public TarefaDiaria(int id, String titulo, String descricao, String data, int prioridade, String horaInicio) {
+    public TarefaDiaria(int id, String titulo, String descricao, String data, int prioridade, String horaInicio, boolean concluida) {
         this.id = id;
         this.titulo = titulo;
         this.descricao = descricao;
         this.data = data;
         this.prioridade = prioridade;
         this.horaInicio = horaInicio;
+        this.concluida = concluida;
     }
     
     public TarefaDiaria(String titulo, String descricao, String data, String horaInicio, String horaFim, int prioridade, boolean concluida, int categoriaId, int tarefaSemanalId) {

@@ -52,8 +52,8 @@ public class ControllerTelaEditarTarefaDiaria {
         return null;
     }
 
-    public static void atualizarTarefaDiaria(int id, String titulo, String descricao, String data, int prioridade, String horaInicio) {
-        TarefaDiaria tarefa = new TarefaDiaria(id, titulo, descricao, data, prioridade, horaInicio);
+    public static void atualizarTarefaDiaria(int id, String titulo, String descricao, String data, int prioridade, String horaInicio, boolean concluida) {
+        TarefaDiaria tarefa = new TarefaDiaria(id, titulo, descricao, data, prioridade, horaInicio, concluida);
         TarefaDiariaDAO dao = new TarefaDiariaDAO();
         ControllerTelaPrincipal controllerTelaPrincipal = new ControllerTelaPrincipal();
         

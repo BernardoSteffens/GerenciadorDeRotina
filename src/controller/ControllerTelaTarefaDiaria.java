@@ -74,7 +74,7 @@ public class ControllerTelaTarefaDiaria {
         return tarefas;
     }
     
-    public static void abrirTelaPrincipal() {
+    public void abrirTelaPrincipal() {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new TelaPrincipal().setVisible(true);

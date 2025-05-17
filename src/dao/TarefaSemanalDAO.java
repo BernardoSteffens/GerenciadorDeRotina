@@ -266,7 +266,6 @@ public class TarefaSemanalDAO {
         String ano = yearFormat.format(data);
         String semana = weekFormat.format(data);
         
-        // Formata para garantir que a semana tenha dois dígitos
         if (semana.length() == 1) {
             semana = "0" + semana;
         }
@@ -285,7 +284,6 @@ public class TarefaSemanalDAO {
         tarefa.setPrioridade(rs.getInt("prioridade"));
         tarefa.setConcluida(rs.getInt("concluida") == 1);
         
-        // Verifica se existe categoria e objetivo associado
         if (rs.getObject("categoria_id") != null) {
             tarefa.setCategoriaId(rs.getInt("categoria_id"));
         }

@@ -183,7 +183,7 @@ public class TarefaDiariaDAO {
     }
     
     public List<TarefaDiaria> buscarPorData(String data) throws SQLException {
-        String sql = "SELECT * FROM tarefas_diarias WHERE data = ? ORDER BY hora_inicio";
+        String sql = "SELECT * FROM tarefas_diarias WHERE data = ? ORDER BY prioridade";
         
         Connection conn = null;
         PreparedStatement stmt = null;

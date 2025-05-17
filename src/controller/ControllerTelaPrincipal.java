@@ -14,6 +14,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.TarefaDiaria;
 import view.TelaPrincipal;
+import view.TelaTarefaDiaria;
+import view.TelaTarefaSemanal;
 
 /**
  *
@@ -33,6 +35,22 @@ public class ControllerTelaPrincipal {
 
     public ControllerTelaPrincipal(TelaPrincipal telaPrincipal) {
         this.telaPrincipal = telaPrincipal;
+    }
+    
+    public static void abrirTelaTarefaDiaira(){
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new TelaTarefaDiaria().setVisible(true);
+            }
+        });
+    }
+
+    public static void abrirTelaTarefaSemanal() {
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new TelaTarefaSemanal().setVisible(true);
+            }
+        });
     }
     
     public static void atualizarConcluidaTarefa(TarefaDiaria tarefaAlterada, boolean estadoConcluida){
