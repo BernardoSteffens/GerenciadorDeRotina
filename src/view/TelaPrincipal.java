@@ -4,7 +4,7 @@
  */
 package view;
 
-import controller.ControllerTelaPrincipal;
+import controller.ControllerPrincipal;
 import java.util.List;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
@@ -17,12 +17,13 @@ import model.TarefaDiaria;
  */
 public class TelaPrincipal extends javax.swing.JFrame {
 
+    private ControllerPrincipal controller = new ControllerPrincipal();
     private List<TarefaDiaria> tarefas;
     
     public TelaPrincipal() {
         initComponents();
         setLocationRelativeTo(null);
-        ControllerTelaPrincipal controller = new ControllerTelaPrincipal(this);
+        ControllerPrincipal controller = new ControllerPrincipal();
         
         DefaultTableModel modelo = new DefaultTableModel(new Object[]{"Título", "Concluida"},0) {
             @Override
@@ -49,16 +50,16 @@ public class TelaPrincipal extends javax.swing.JFrame {
                     int linhaSelecionada = tblResultados.getSelectedRow();
                     
                     TarefaDiaria tarefaAlterada = tarefas.get(linhaSelecionada);
-                    ControllerTelaPrincipal.atualizarConcluidaTarefa(tarefaAlterada, concluida);
+                    controller.atualizarConcluidaTarefa(tarefaAlterada, concluida);
                 }
             }
         
         });
         
         tblResultados.setModel(modelo);
-
-        controller.atualizarDataDeHoje();
-        controller.atualizarTarefasDoDia();
+        
+        atualizarDataDeHoje();
+        atualizarTarefasDoDia();
     }
 
     @SuppressWarnings("unchecked")
@@ -180,20 +181,20 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnTarefaDiariaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTarefaDiariaActionPerformed
-        ControllerTelaPrincipal.abrirTelaTarefaDiaira();
+        controller.abrirTelaTarefaDiaira();
         this.dispose();
     }//GEN-LAST:event_btnTarefaDiariaActionPerformed
 
     private void btnTarefaSemanalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTarefaSemanalActionPerformed
-        ControllerTelaPrincipal.abrirTelaTarefaSemanal();
+        controller.abrirTelaTarefaSemanal();
         this.dispose();
     }//GEN-LAST:event_btnTarefaSemanalActionPerformed
     
-    public void atualizarTarefasDoDia(List<TarefaDiaria> tarefas){
+    public void atualizarTarefasDoDia(){
         DefaultTableModel modelo = (DefaultTableModel) tblResultados.getModel();
         modelo.setRowCount(0);
-        this.tarefas = tarefas;
-        
+        tarefas = controller.gerarTarefasDoDia();
+
         for (TarefaDiaria tarefa : tarefas) {
             modelo.addRow(new Object[]{
                 tarefa.getTitulo(),
@@ -202,8 +203,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
         }
     }
     
-    public void atualizarDataDeHoje(String data) {
-        lblDataHoje.setText(data);
+    public void atualizarDataDeHoje() {
+        lblDataHoje.setText(controller.getData());
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

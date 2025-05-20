@@ -9,6 +9,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import model.Semana;
@@ -23,7 +25,7 @@ public class SemanaDAO {
         String sql = "INSERT INTO semanas (dia_comeco, dia_fim) VALUES (?, ?)";
 
         try (Connection conn = ConexaoDB.getConexao();
-             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             stmt.setString(1, semana.getDiaComeco());
             stmt.setString(2, semana.getDiaFim());
@@ -45,6 +47,38 @@ public class SemanaDAO {
         } catch (SQLException e) {
             ConexaoDB.rollback();
             throw e;
+        }
+    }
+     
+    public void adicionarSemana(){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        
+        String sql = "SELECT * FROM semanas ORDER BY dia_fim DESC LIMIT 1";
+        
+        try (Connection conn = ConexaoDB.getConexao();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            
+            LocalDate diaComeco;
+            
+            if (rs.next()) {
+                String ultimoDiaFim = rs.getString("dia_fim");
+                LocalDate ultimaData = LocalDate.parse(ultimoDiaFim, formatter);
+                diaComeco = ultimaData.plusDays(1); 
+            } else {
+                diaComeco = LocalDate.now();
+            }
+            
+            LocalDate diaFim = diaComeco.plusDays(6);
+            
+            Semana novaSemana = new Semana();
+            novaSemana.setDiaComeco(diaComeco.format(formatter));
+            novaSemana.setDiaFim(diaFim.format(formatter));
+            
+            inserir(novaSemana);         
+            
+        } catch (SQLException e) {
+            ConexaoDB.rollback();
         }
     }
 

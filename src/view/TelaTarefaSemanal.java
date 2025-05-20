@@ -4,11 +4,13 @@
  */
 package view;
 
-import controller.ControllerTelaTarefaSemanal;
+import controller.ControllerTarefaSemanal;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.List;
+import javax.swing.table.DefaultTableModel;
 import model.Semana;
+import model.TarefaSemanal;
 
 /**
  *
@@ -16,7 +18,9 @@ import model.Semana;
  */
 public class TelaTarefaSemanal extends javax.swing.JFrame {
 
-    ControllerTelaTarefaSemanal controller= new ControllerTelaTarefaSemanal();
+    private ControllerTarefaSemanal controller = new ControllerTarefaSemanal();
+    private List<Semana> semanas;
+    private int idSemana;
     
     public TelaTarefaSemanal() {
         initComponents();
@@ -29,15 +33,58 @@ public class TelaTarefaSemanal extends javax.swing.JFrame {
                 fecharTela();   
             }
 
-            
         });
+
+        atualizarSemanas();
+        inicializarTabela();
+    }
+
+    private void inicializarTabela(){
+        DefaultTableModel tabela = new DefaultTableModel(new Object[]{"Título", "Descrição", "Prioridade", "Concluida"},0){
+              @Override
+            public boolean isCellEditable(int row, int column) {
+                return column == 3;
+            }
+            
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                switch (columnIndex) {
+                    case 2:
+                        return Integer.class;
+                    case 3:
+                        return Boolean.class;
+                    default:
+                        return String.class;
+                }
+            }
+        };
         
-        List<Semana> semanas = controller.listarSemanas();
+        tblResultados.setModel(tabela);
+    }
+    
+    private void atualizarSemanas(){
+        semanas = controller.listarSemanas();
         for(Semana semana : semanas){
             cbSemanas.addItem(semana.toString());
         }
     }
-
+    
+    private void atualizarTarefas(){
+        List<TarefaSemanal> tarefas = controller.listarTarefasSemanais(idSemana);
+        
+        DefaultTableModel modelo = (DefaultTableModel) tblResultados.getModel();
+        modelo.setRowCount(0);
+            
+        for (TarefaSemanal tarefa : tarefas) {
+            modelo.addRow(new Object[]{
+                tarefa.getTitulo(),
+                tarefa.getDescricao(),
+                tarefa.getPrioridade(),
+                tarefa.isConcluida()
+            });
+        }
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -46,10 +93,10 @@ public class TelaTarefaSemanal extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         cbSemanas = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
+        btnAdicionarSemana = new javax.swing.JButton();
         btnAdicionar = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        btnAdicionarSemana = new javax.swing.JButton();
+        tblResultados = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Gerenciador de Rotina - Tarefas Semanais");
@@ -60,8 +107,22 @@ public class TelaTarefaSemanal extends javax.swing.JFrame {
 
         jPanel1.setPreferredSize(new java.awt.Dimension(853, 101));
 
+        cbSemanas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbSemanasActionPerformed(evt);
+            }
+        });
+
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setText("Semana:");
+
+        btnAdicionarSemana.setText("Adicionar Semana");
+        btnAdicionarSemana.setPreferredSize(new java.awt.Dimension(142, 40));
+        btnAdicionarSemana.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAdicionarSemanaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -71,8 +132,10 @@ public class TelaTarefaSemanal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cbSemanas, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(cbSemanas, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(36, 36, 36)
+                .addComponent(btnAdicionarSemana, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(404, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -80,8 +143,9 @@ public class TelaTarefaSemanal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cbSemanas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addContainerGap(73, Short.MAX_VALUE))
+                    .addComponent(jLabel2)
+                    .addComponent(btnAdicionarSemana, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(55, Short.MAX_VALUE))
         );
 
         btnAdicionar.setText("Adicionar");
@@ -92,26 +156,15 @@ public class TelaTarefaSemanal extends javax.swing.JFrame {
             }
         });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblResultados.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
-        jScrollPane2.setViewportView(jTable1);
-
-        btnAdicionarSemana.setText("Adicionar Semana");
-        btnAdicionarSemana.setPreferredSize(new java.awt.Dimension(142, 40));
-        btnAdicionarSemana.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAdicionarSemanaActionPerformed(evt);
-            }
-        });
+        jScrollPane2.setViewportView(tblResultados);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -121,13 +174,12 @@ public class TelaTarefaSemanal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 833, Short.MAX_VALUE)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 833, Short.MAX_VALUE))
+                        .addGap(6, 6, 6)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 833, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 833, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(34, 34, 34)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnAdicionarSemana, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel1))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
@@ -140,25 +192,30 @@ public class TelaTarefaSemanal extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnAdicionarSemana, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(6, 6, 6)))
-                .addGap(26, 26, 26)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addContainerGap(35, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
-        // TODO add your handling code here:
+        controller.abrirTelaAdicionar();
+        controller.setIdSemana(idSemana);
     }//GEN-LAST:event_btnAdicionarActionPerformed
 
     private void btnAdicionarSemanaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarSemanaActionPerformed
-        // TODO add your handling code here:
+        controller.adicionarSemana();
+        atualizarSemanas();
     }//GEN-LAST:event_btnAdicionarSemanaActionPerformed
+
+    private void cbSemanasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSemanasActionPerformed
+        idSemana = semanas.get(cbSemanas.getSelectedIndex()).getId();
+        atualizarTarefas();
+    }//GEN-LAST:event_cbSemanasActionPerformed
 
     private void fecharTela() {
         this.dispose();
@@ -172,6 +229,6 @@ public class TelaTarefaSemanal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tblResultados;
     // End of variables declaration//GEN-END:variables
 }

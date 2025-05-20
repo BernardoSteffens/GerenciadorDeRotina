@@ -68,6 +68,7 @@ public class ConexaoDB {
                     "semana_id INTEGER," +
                     "FOREIGN KEY (categoria_id) REFERENCES categorias (id), " +
                     "FOREIGN KEY (objetivo_id) REFERENCES objetivos_trimestrais (id)" +
+                    "FOREIGN KEY (semana_id) REFERENCES semanas (id)" +
                     ")");
             
             stmt.execute("CREATE TABLE IF NOT EXISTS semanas (" +

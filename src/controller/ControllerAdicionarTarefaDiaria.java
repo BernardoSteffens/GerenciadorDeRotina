@@ -17,32 +17,34 @@ import view.TelaAdicionarTarefaDiaria;
  *
  * @author Bernardo
  */
-public class ControllerTelaAdicionarTarefaDiaria {
+public class ControllerAdicionarTarefaDiaria {
 
-    private static TelaAdicionarTarefaDiaria tela = new TelaAdicionarTarefaDiaria();
+    private TelaAdicionarTarefaDiaria tela = new TelaAdicionarTarefaDiaria();
 
-    public ControllerTelaAdicionarTarefaDiaria(TelaAdicionarTarefaDiaria tela) {
-        this.tela = tela;
-        atualizarData();
+    public static void exibirTela(){
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new TelaAdicionarTarefaDiaria().setVisible(true);
+            }
+        });
     }
     
     public void atualizarData(){
         tela.atualizarData();
     }
-    
-    
-    public static void adicionarTarefaDiaria(String titulo, String descricao, String data, int prioridade, String horaInicio) {
+
+    public void adicionarTarefaDiaria(String titulo, String descricao, String data, int prioridade, String horaInicio) {
         TarefaDiaria tarefa = new TarefaDiaria(titulo, descricao, data, prioridade, horaInicio);
         TarefaDiariaDAO dao = new TarefaDiariaDAO();
-        ControllerTelaPrincipal controllerTelaPrincipal = new ControllerTelaPrincipal();
+        ControllerPrincipal controllerTelaPrincipal = new ControllerPrincipal();
         
         try {
             dao.inserir(tarefa);
         } catch (SQLException ex) {
-            Logger.getLogger(ControllerTelaAdicionarTarefaDiaria.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ControllerAdicionarTarefaDiaria.class.getName()).log(Level.SEVERE, null, ex);
         }
-        controllerTelaPrincipal.atualizarTarefasDoDia();
-        ControllerTelaTarefaDiaria.atualizarPesquisa();
+        //controllerTelaPrincipal.atualizarTarefasDoDia();
+        //ControllerTarefaDiaria.atualizarPesquisa();
     }
     
     public void atualizarPesquisa(){

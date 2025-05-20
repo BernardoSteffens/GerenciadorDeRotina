@@ -4,7 +4,7 @@
  */
 package view;
 
-import controller.ControllerTelaTarefaDiaria;
+import controller.ControllerTarefaDiaria;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.text.SimpleDateFormat;
@@ -23,7 +23,7 @@ import model.TarefaDiaria;
  */
 public class TelaTarefaDiaria extends javax.swing.JFrame {
     
-    private ControllerTelaTarefaDiaria controller = new ControllerTelaTarefaDiaria(this);
+    private ControllerTarefaDiaria controller = new ControllerTarefaDiaria();
     private List<TarefaDiaria> tarefas;
 
     public TelaTarefaDiaria() {
@@ -315,7 +315,7 @@ public class TelaTarefaDiaria extends javax.swing.JFrame {
                     int linhaSelecionada = tblResultados.getSelectedRow();
                     
                     TarefaDiaria tarefaAlterada = tarefas.get(linhaSelecionada);
-                    ControllerTelaTarefaDiaria.atualizarConcluidaTarefa(tarefaAlterada, concluida);
+                    controller.atualizarConcluidaTarefa(tarefaAlterada, concluida);
                 }
             }
         });
@@ -341,7 +341,7 @@ public class TelaTarefaDiaria extends javax.swing.JFrame {
         
         if(linhaSelecionada != -1){
             TarefaDiaria tarefaSelecionada = tarefas.get(linhaSelecionada);
-            ControllerTelaTarefaDiaria.apagarTarefaSelecionada(tarefaSelecionada);
+            controller.apagarTarefaSelecionada(tarefaSelecionada);
         }
     }//GEN-LAST:event_btnExcluirActionPerformed
 
@@ -394,7 +394,7 @@ public class TelaTarefaDiaria extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLimparActionPerformed
 
     private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
-        ControllerTelaTarefaDiaria.abrirTelaAdicionarTarefaDiaria();
+        controller.abrirTelaAdicionarTarefaDiaria();
     }//GEN-LAST:event_btnAdicionarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
@@ -402,7 +402,7 @@ public class TelaTarefaDiaria extends javax.swing.JFrame {
         
         if(linhaSelecionada != -1){
             TarefaDiaria tarefaSelecionada = tarefas.get(linhaSelecionada);
-            ControllerTelaTarefaDiaria.abrirTelaEditarTarefaDiaria(tarefaSelecionada);
+            controller.abrirTelaEditarTarefaDiaria(tarefaSelecionada);
         }
     }//GEN-LAST:event_btnEditarActionPerformed
 

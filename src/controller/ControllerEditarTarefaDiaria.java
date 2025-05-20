@@ -18,9 +18,17 @@ import view.TelaEditarTarefaDiaria;
  *
  * @author Bernardo
  */
-public class ControllerTelaEditarTarefaDiaria {
+public class ControllerEditarTarefaDiaria {
     
     private static TarefaDiaria tarefa;
+    
+    public static void exibirTela(){
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new TelaEditarTarefaDiaria().setVisible(true);
+            }
+        }); 
+    }
     
     public static void receberTarefaSelecionada(TarefaDiaria tarefaSelecionada){
         tarefa = tarefaSelecionada;
@@ -36,7 +44,7 @@ public class ControllerTelaEditarTarefaDiaria {
         try {
             return sdfData.parse(dataString);
         } catch (ParseException ex) {
-            java.util.logging.Logger.getLogger(ControllerTelaEditarTarefaDiaria.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ControllerEditarTarefaDiaria.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
@@ -47,7 +55,7 @@ public class ControllerTelaEditarTarefaDiaria {
         try {
             return sdfHora.parse(horaString);
         } catch (ParseException ex) {
-            java.util.logging.Logger.getLogger(ControllerTelaEditarTarefaDiaria.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ControllerEditarTarefaDiaria.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
@@ -55,15 +63,15 @@ public class ControllerTelaEditarTarefaDiaria {
     public static void atualizarTarefaDiaria(int id, String titulo, String descricao, String data, int prioridade, String horaInicio, boolean concluida) {
         TarefaDiaria tarefa = new TarefaDiaria(id, titulo, descricao, data, prioridade, horaInicio, concluida);
         TarefaDiariaDAO dao = new TarefaDiariaDAO();
-        ControllerTelaPrincipal controllerTelaPrincipal = new ControllerTelaPrincipal();
+        ControllerPrincipal controllerTelaPrincipal = new ControllerPrincipal();
         
         try {
             dao.atualizar(tarefa);
         } catch (SQLException ex) {
-            java.util.logging.Logger.getLogger(ControllerTelaAdicionarTarefaDiaria.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ControllerAdicionarTarefaDiaria.class.getName()).log(Level.SEVERE, null, ex);
         }
-        controllerTelaPrincipal.atualizarTarefasDoDia();
-        ControllerTelaTarefaDiaria.atualizarPesquisa();
+        //controllerTelaPrincipal.atualizarTarefasDoDia();
+        ControllerTarefaDiaria.atualizarPesquisa();
     }
     
 }

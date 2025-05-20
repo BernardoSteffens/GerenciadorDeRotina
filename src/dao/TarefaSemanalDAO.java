@@ -17,9 +17,8 @@ public class TarefaSemanalDAO {
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     
     public boolean inserir(TarefaSemanal tarefa) throws SQLException {
-        String sql = "INSERT INTO tarefas_semanais (titulo, descricao, dia_semana, " +
-                     "semana_ano, prioridade, concluida, categoria_id, objetivo_id) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO tarefas_semanais (titulo, descricao, prioridade, concluida, categoria_id, objetivo_id, semana_id) " +
+                     "VALUES (?, ?, ?, ?, ?, ?, ?)";
         
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -30,21 +29,21 @@ public class TarefaSemanalDAO {
             
             stmt.setString(1, tarefa.getTitulo());
             stmt.setString(2, tarefa.getDescricao());
-            stmt.setInt(3, tarefa.getDiaSemana());
-            stmt.setString(4, tarefa.getSemanaAno());
-            stmt.setInt(5, tarefa.getPrioridade());
-            stmt.setInt(6, tarefa.isConcluida() ? 1 : 0);
+            stmt.setInt(3, tarefa.getPrioridade());
+            stmt.setInt(4, tarefa.isConcluida() ? 1 : 0);
+            stmt.setInt(7, tarefa.getSemanaId());
+            System.out.println(tarefa.getSemanaId());
             
             if (tarefa.getCategoriaId() > 0) {
-                stmt.setInt(7, tarefa.getCategoriaId());
+                stmt.setInt(5, tarefa.getCategoriaId());
             } else {
-                stmt.setNull(7, java.sql.Types.INTEGER);
+                stmt.setNull(5, java.sql.Types.INTEGER);
             }
             
             if (tarefa.getObjetivoId() > 0) {
-                stmt.setInt(8, tarefa.getObjetivoId());
+                stmt.setInt(6, tarefa.getObjetivoId());
             } else {
-                stmt.setNull(8, java.sql.Types.INTEGER);
+                stmt.setNull(6, java.sql.Types.INTEGER);
             }
             
             int resultado = stmt.executeUpdate();
@@ -73,9 +72,8 @@ public class TarefaSemanalDAO {
     }
     
     public boolean atualizar(TarefaSemanal tarefa) throws SQLException {
-        String sql = "UPDATE tarefas_semanais SET titulo = ?, descricao = ?, dia_semana = ?, " +
-                     "semana_ano = ?, prioridade = ?, concluida = ?, categoria_id = ?, " +
-                     "objetivo_id = ? WHERE id = ?";
+        String sql = "UPDATE tarefas_semanais SET titulo = ?, descricao = ?, prioridade = ?, concluida = ?, categoria_id = ?, " +
+                     "objetivo_id = ?, semana_id = ? WHERE id = ?";
         
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -86,23 +84,20 @@ public class TarefaSemanalDAO {
             
             stmt.setString(1, tarefa.getTitulo());
             stmt.setString(2, tarefa.getDescricao());
-            stmt.setInt(3, tarefa.getDiaSemana());
-            stmt.setString(4, tarefa.getSemanaAno());
-            stmt.setInt(5, tarefa.getPrioridade());
-            stmt.setInt(6, tarefa.isConcluida() ? 1 : 0);
+            stmt.setInt(3, tarefa.getPrioridade());
+            stmt.setInt(4, tarefa.isConcluida() ? 1 : 0);
+            stmt.setInt(7, tarefa.isConcluida() ? 1 : 0);
             
-            // Verifica se existe categoria definida
             if (tarefa.getCategoriaId() > 0) {
-                stmt.setInt(7, tarefa.getCategoriaId());
+                stmt.setInt(5, tarefa.getCategoriaId());
             } else {
-                stmt.setNull(7, java.sql.Types.INTEGER);
+                stmt.setNull(5, java.sql.Types.INTEGER);
             }
             
-            // Verifica se existe objetivo vinculado
             if (tarefa.getObjetivoId() > 0) {
-                stmt.setInt(8, tarefa.getObjetivoId());
+                stmt.setInt(6, tarefa.getObjetivoId());
             } else {
-                stmt.setNull(8, java.sql.Types.INTEGER);
+                stmt.setNull(6, java.sql.Types.INTEGER);
             }
             
             stmt.setInt(9, tarefa.getId());
@@ -182,14 +177,10 @@ public class TarefaSemanalDAO {
         }
     }
     
-    public List<TarefaSemanal> buscarPorPeriodo(Date dataInicio, Date dataFim) throws SQLException {
-        // Calcula a semana_ano para as datas informadas
-        // Este é um cálculo simplificado - você pode usar uma lógica mais robusta
-        String semanaAnoInicio = calcularSemanaAno(dataInicio);
-        String semanaAnoFim = calcularSemanaAno(dataFim);
-        
-        String sql = "SELECT * FROM tarefas_semanais WHERE semana_ano BETWEEN ? AND ? " +
-                     "ORDER BY semana_ano, dia_semana";
+    public List<TarefaSemanal> buscarPorIdSemana(int idSemana) throws SQLException {
+       
+        String sql = "SELECT * FROM tarefas_semanais WHERE semana_id = ?" +
+                     "ORDER BY titulo";
         
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -199,8 +190,7 @@ public class TarefaSemanalDAO {
             conn = ConexaoDB.getConexao();
             stmt = conn.prepareStatement(sql);
             
-            stmt.setString(1, semanaAnoInicio);
-            stmt.setString(2, semanaAnoFim);
+            stmt.setString(1, Integer.toString(idSemana));
             
             rs = stmt.executeQuery();
             
@@ -225,7 +215,7 @@ public class TarefaSemanalDAO {
     }
     
     public List<TarefaSemanal> listarTodos() throws SQLException {
-        String sql = "SELECT * FROM tarefas_semanais ORDER BY semana_ano DESC, dia_semana";
+        String sql = "SELECT * FROM tarefas_semanais ORDER BY semana_id";
         
         Connection conn = null;
         Statement stmt = null;
@@ -256,33 +246,16 @@ public class TarefaSemanalDAO {
             }
         }
     }
-    
-    private String calcularSemanaAno(Date data) {
-        if (data == null) return "";
         
-        SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
-        SimpleDateFormat weekFormat = new SimpleDateFormat("w");
-        
-        String ano = yearFormat.format(data);
-        String semana = weekFormat.format(data);
-        
-        if (semana.length() == 1) {
-            semana = "0" + semana;
-        }
-        
-        return ano + "-" + semana;
-    }
-    
     private TarefaSemanal criarTarefaSemanalDoResultSet(ResultSet rs) throws SQLException {
         TarefaSemanal tarefa = new TarefaSemanal();
         
         tarefa.setId(rs.getInt("id"));
         tarefa.setTitulo(rs.getString("titulo"));
         tarefa.setDescricao(rs.getString("descricao"));
-        tarefa.setDiaSemana(rs.getInt("dia_semana"));
-        tarefa.setSemanaAno(rs.getString("semana_ano"));
         tarefa.setPrioridade(rs.getInt("prioridade"));
         tarefa.setConcluida(rs.getInt("concluida") == 1);
+        tarefa.setSemanaId(rs.getInt("semana_id"));
         
         if (rs.getObject("categoria_id") != null) {
             tarefa.setCategoriaId(rs.getInt("categoria_id"));
