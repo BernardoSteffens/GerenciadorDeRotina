@@ -1,11 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package controller;
 
 import dao.TarefaDiariaDAO;
-import java.lang.System.Logger;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -13,7 +8,6 @@ import java.util.Date;
 import java.util.logging.Level;
 import model.TarefaDiaria;
 import view.TelaEditarTarefaDiaria;
-import view.TelaTarefaDiaria;
 
 /**
  *
@@ -21,22 +15,14 @@ import view.TelaTarefaDiaria;
  */
 public class ControllerEditarTarefaDiaria {
     
-    private static TarefaDiaria tarefa;
+    private TarefaDiaria tarefa;
     private TelaEditarTarefaDiaria tela;
     private AtualizacaoTarefaDiariaListener listener;
     
     public void exibirTela(){
-        TelaEditarTarefaDiaria telaEditarTarefaDiaria = new TelaEditarTarefaDiaria(this);
+        TelaEditarTarefaDiaria telaEditarTarefaDiaria = new TelaEditarTarefaDiaria(this, tarefa);
         telaEditarTarefaDiaria.setVisible(true);
         this.tela = telaEditarTarefaDiaria;     
-    }
-    
-    public static void receberTarefaSelecionada(TarefaDiaria tarefaSelecionada){
-        tarefa = tarefaSelecionada;
-    }
-
-    public static TarefaDiaria getTarefa() {
-        return tarefa;
     }
     
     public Date stringParaDate(String dataString){
@@ -72,5 +58,12 @@ public class ControllerEditarTarefaDiaria {
         }
         listener.atualizarLista();
     }
-    
+
+    public void setTarefa(TarefaDiaria tarefa) {
+        this.tarefa = tarefa;
+    }
+
+    void setAtualizacaoListener(ControllerTarefaDiaria listener) {
+        this.listener = listener;
+    }
 }

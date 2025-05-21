@@ -15,18 +15,24 @@ import model.TarefaDiaria;
  */
 public class TelaEditarTarefaDiaria extends javax.swing.JFrame {
     
-    TarefaDiaria tarefa = ControllerEditarTarefaDiaria.getTarefa();
-    ControllerEditarTarefaDiaria controller;
+    private TarefaDiaria tarefa;
+    private ControllerEditarTarefaDiaria controller;
     
-    public TelaEditarTarefaDiaria(ControllerEditarTarefaDiaria controller) {
+    public TelaEditarTarefaDiaria(ControllerEditarTarefaDiaria controller, TarefaDiaria tarefa) {
         initComponents();
         setLocationRelativeTo(null);
         this.controller = controller;
+        this.tarefa = tarefa;
         
+        inicializarTarefa();
+    }
+    
+    private void inicializarTarefa(){
         txfData.setEditor(new javax.swing.JSpinner.DateEditor(txfData, "dd/MM/yyyy"));
         txfData.setValue(new java.util.Date());
         
         spnHoraInicio.setEditor(new javax.swing.JSpinner.DateEditor(spnHoraInicio, "HH:mm"));
+
         txfTitulo.setText(tarefa.getTitulo());
         txfData.setValue(controller.stringParaDate(tarefa.getData()));
         spnHoraInicio.setValue(controller.stringParaDateHora(tarefa.getHoraInicio()));
@@ -56,6 +62,7 @@ public class TelaEditarTarefaDiaria extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Gerenciador de Rotina - Editar Tarefa Diária");
+        setAlwaysOnTop(true);
         setResizable(false);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N

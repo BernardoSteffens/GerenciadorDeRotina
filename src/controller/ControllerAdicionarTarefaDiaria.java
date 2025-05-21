@@ -30,7 +30,6 @@ public class ControllerAdicionarTarefaDiaria {
     public void adicionarTarefaDiaria(String titulo, String descricao, String data, int prioridade, String horaInicio) {
         TarefaDiaria tarefa = new TarefaDiaria(titulo, descricao, data, prioridade, horaInicio);
         TarefaDiariaDAO dao = new TarefaDiariaDAO();
-        ControllerPrincipal controllerTelaPrincipal = new ControllerPrincipal();
         
         try {
             dao.inserir(tarefa);

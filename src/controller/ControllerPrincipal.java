@@ -19,7 +19,7 @@ import view.TelaPrincipal;
  *
  * @author Bernardo
  */
-public class ControllerPrincipal implements AtualizacaoTarefaDiariaListener{
+public class ControllerPrincipal{
 
     private Date hoje = new Date();
     private SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
@@ -30,8 +30,7 @@ public class ControllerPrincipal implements AtualizacaoTarefaDiariaListener{
     public void exibirTela(){
         TelaPrincipal telaPrincipal = new TelaPrincipal(this);
         telaPrincipal.setVisible(true);
-        this.tela = telaPrincipal;
-        
+        this.tela = telaPrincipal;    
     }
     
     public void abrirTelaTarefaDiaira(){
@@ -72,10 +71,5 @@ public class ControllerPrincipal implements AtualizacaoTarefaDiariaListener{
 
     public String getData() {
         return data;
-    }
-
-    @Override
-    public void atualizarLista() {
-        tela.atualizarTarefasDoDia();
     }
 }

@@ -52,7 +52,6 @@ public class ControllerTarefaDiaria implements AtualizacaoTarefaDiariaListener{
         } catch (SQLException ex) {
             Logger.getLogger(ControllerTarefaDiaria.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
     }
 
     public List<TarefaDiaria> pesquisar(String titulo, String data, int prioridade, int concluida){
@@ -79,8 +78,10 @@ public class ControllerTarefaDiaria implements AtualizacaoTarefaDiariaListener{
     }
     
     public void abrirTelaEditarTarefaDiaria(TarefaDiaria tarefaSelecionada) {
+        controllerEditar = new ControllerEditarTarefaDiaria();
+        controllerEditar.setTarefa(tarefaSelecionada);
+        controllerEditar.setAtualizacaoListener(this);
         controllerEditar.exibirTela();
-        ControllerEditarTarefaDiaria.receberTarefaSelecionada(tarefaSelecionada);
     }
 
     @Override
