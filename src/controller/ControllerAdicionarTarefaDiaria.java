@@ -6,8 +6,6 @@ package controller;
 
 import dao.TarefaDiariaDAO;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.TarefaDiaria;
@@ -19,20 +17,16 @@ import view.TelaAdicionarTarefaDiaria;
  */
 public class ControllerAdicionarTarefaDiaria {
 
-    private TelaAdicionarTarefaDiaria tela = new TelaAdicionarTarefaDiaria();
+    private AtualizacaoTarefaDiariaListener listener;
 
-    public static void exibirTela(){
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new TelaAdicionarTarefaDiaria().setVisible(true);
-            }
-        });
+    public void exibirTela(){
+        new TelaAdicionarTarefaDiaria(this).setVisible(true);
+    }
+
+    public void setAtualizacaoListener(AtualizacaoTarefaDiariaListener listener) {
+        this.listener = listener;
     }
     
-    public void atualizarData(){
-        tela.atualizarData();
-    }
-
     public void adicionarTarefaDiaria(String titulo, String descricao, String data, int prioridade, String horaInicio) {
         TarefaDiaria tarefa = new TarefaDiaria(titulo, descricao, data, prioridade, horaInicio);
         TarefaDiariaDAO dao = new TarefaDiariaDAO();
@@ -43,11 +37,8 @@ public class ControllerAdicionarTarefaDiaria {
         } catch (SQLException ex) {
             Logger.getLogger(ControllerAdicionarTarefaDiaria.class.getName()).log(Level.SEVERE, null, ex);
         }
-        //controllerTelaPrincipal.atualizarTarefasDoDia();
-        //ControllerTarefaDiaria.atualizarPesquisa();
+        listener.atualizarLista();
     }
     
-    public void atualizarPesquisa(){
-        
-    }
+    
 }

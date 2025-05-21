@@ -7,35 +7,32 @@ package controller;
 import dao.TarefaDiariaDAO;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.TarefaDiaria;
-import view.TelaAdicionarTarefaDiaria;
-import view.TelaEditarTarefaDiaria;
-import view.TelaPrincipal;
 import view.TelaTarefaDiaria;
 
 /**
  *
  * @author Bernardo
  */
-public class ControllerTarefaDiaria {
-    
-    private static TelaTarefaDiaria tela = new TelaTarefaDiaria();
-    
-    public static void exibirTela(){
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new TelaTarefaDiaria().setVisible(true);
-            }
-        });
+public class ControllerTarefaDiaria implements AtualizacaoTarefaDiariaListener{
+        
+    private TelaTarefaDiaria tela; 
+    private TarefaDiariaDAO dao = new TarefaDiariaDAO();
+    private ControllerPrincipal controllerPrincipal;
+    private AtualizacaoTarefaDiariaListener listener;
+    private ControllerAdicionarTarefaDiaria controllerAdicionar;
+    private ControllerEditarTarefaDiaria controllerEditar;
+
+    public void exibirTela(){
+        TelaTarefaDiaria telaTarefaDiaria = new TelaTarefaDiaria(this);
+        telaTarefaDiaria.setVisible(true);
+        this.tela = telaTarefaDiaria;
     }
     
     public void apagarTarefaSelecionada(TarefaDiaria tarefaSelecionada) {
         int id = tarefaSelecionada.getId();
-        ControllerPrincipal controllerTelaPrincipal = new ControllerPrincipal();
-        TarefaDiariaDAO dao = new TarefaDiariaDAO();
         
         try {
             dao.deletar(id);
@@ -43,8 +40,7 @@ public class ControllerTarefaDiaria {
             Logger.getLogger(ControllerTarefaDiaria.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        //controllerTelaPrincipal.atualizarTarefasDoDia();
-        ControllerTarefaDiaria.atualizarPesquisa();
+        listener.atualizarLista();
     }
     
     public void atualizarConcluidaTarefa(TarefaDiaria tarefaAlterada, boolean estadoConcluida){
@@ -59,12 +55,6 @@ public class ControllerTarefaDiaria {
         
     }
 
-    private TarefaDiariaDAO dao = new TarefaDiariaDAO();
-    
-    public static void atualizarPesquisa(){
-       tela.atualizarPesquisa();
-   }
-    
     public List<TarefaDiaria> pesquisar(String titulo, String data, int prioridade, int concluida){
         
         List<TarefaDiaria> tarefas = null;
@@ -79,15 +69,26 @@ public class ControllerTarefaDiaria {
     }
     
     public void abrirTelaPrincipal() {
-        ControllerPrincipal.exibirTela();
+        controllerPrincipal.exibirTela();
     }
     
     public void abrirTelaAdicionarTarefaDiaria() {
-        ControllerAdicionarTarefaDiaria.exibirTela();
+        controllerAdicionar = new ControllerAdicionarTarefaDiaria();
+        controllerAdicionar.setAtualizacaoListener(this);
+        controllerAdicionar.exibirTela();
     }
     
     public void abrirTelaEditarTarefaDiaria(TarefaDiaria tarefaSelecionada) {
-        ControllerEditarTarefaDiaria.exibirTela();
+        controllerEditar.exibirTela();
         ControllerEditarTarefaDiaria.receberTarefaSelecionada(tarefaSelecionada);
+    }
+
+    @Override
+    public void atualizarLista() {
+        tela.pesquisar();
+    }
+
+    public void setControllerPrincipal(ControllerPrincipal controllerPrincipal) {
+        this.controllerPrincipal = controllerPrincipal;
     }
 }

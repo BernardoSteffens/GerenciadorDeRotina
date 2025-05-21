@@ -14,33 +14,36 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.TarefaDiaria;
 import view.TelaPrincipal;
-import view.TelaTarefaDiaria;
-import view.TelaTarefaSemanal;
 
 /**
  *
  * @author Bernardo
  */
-public class ControllerPrincipal {
+public class ControllerPrincipal implements AtualizacaoTarefaDiariaListener{
 
     private Date hoje = new Date();
     private SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
     private String data = formato.format(hoje);
+    private TelaPrincipal tela;
     
-    public static void exibirTela(){
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new TelaPrincipal().setVisible(true);
-            }
-        });
+    
+    public void exibirTela(){
+        TelaPrincipal telaPrincipal = new TelaPrincipal(this);
+        telaPrincipal.setVisible(true);
+        this.tela = telaPrincipal;
+        
     }
     
     public void abrirTelaTarefaDiaira(){
-        ControllerTarefaDiaria.exibirTela();
+        ControllerTarefaDiaria controllerTarefaDiaria = new ControllerTarefaDiaria();
+        controllerTarefaDiaria.setControllerPrincipal(this);
+        controllerTarefaDiaria.exibirTela();
     }
 
     public void abrirTelaTarefaSemanal() {
-        ControllerTarefaSemanal.exibirTela();
+        ControllerTarefaSemanal controllerTarefaSemanal = new ControllerTarefaSemanal();
+        controllerTarefaSemanal.setControllerPrincipal(this);
+        controllerTarefaSemanal.exibirTela();
     }
     
     public void atualizarConcluidaTarefa(TarefaDiaria tarefaAlterada, boolean estadoConcluida){
@@ -69,5 +72,10 @@ public class ControllerPrincipal {
 
     public String getData() {
         return data;
+    }
+
+    @Override
+    public void atualizarLista() {
+        tela.atualizarTarefasDoDia();
     }
 }
