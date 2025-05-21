@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package controller;
 
 import dao.SemanaDAO;
@@ -13,8 +9,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Semana;
 import model.TarefaSemanal;
-import view.TelaAdicionarTarefaSemanal;
-import view.TelaPrincipal;
 import view.TelaTarefaSemanal;
 
 /**
@@ -27,13 +21,15 @@ public class ControllerTarefaSemanal {
     private SemanaDAO semanaDao = new SemanaDAO();
     private TarefaSemanalDAO tarefaSemanalDao = new TarefaSemanalDAO();
     private ControllerAdicionarTarefaSemanal controller = new ControllerAdicionarTarefaSemanal();
-    
-    public static void exibirTela(){
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new TelaTarefaSemanal().setVisible(true);
-            }
-        });
+    private TelaTarefaSemanal tela;
+    private ControllerPrincipal controllerPrincipal;
+    private ControllerAdicionarTarefaSemanal controllerAdicionar = new ControllerAdicionarTarefaSemanal();
+
+    public void exibirTela(){
+        TelaTarefaSemanal telaTarefaSemanal = new TelaTarefaSemanal(this);
+        telaTarefaSemanal.setVisible(true);
+        this.tela = telaTarefaSemanal;
+        
     }
     
     public List<TarefaSemanal> listarTarefasSemanais(int idSemana){
@@ -61,7 +57,7 @@ public class ControllerTarefaSemanal {
     }
 
     public void abrirTelaPrincipal() {
-        ControllerPrincipal.exibirTela();
+        controllerPrincipal.exibirTela();
     }
 
     public void adicionarSemana() {
@@ -70,12 +66,14 @@ public class ControllerTarefaSemanal {
 
     public void abrirTelaAdicionar() {
         controller.receberIdSemana(idSemana);
-        ControllerAdicionarTarefaSemanal.exibirTela();
+        controllerAdicionar.exibirTela();
     }
 
     public void setIdSemana(int idSemana) {
         this.idSemana = idSemana;
     }
-    
-    
+
+    public void setControllerPrincipal(ControllerPrincipal controllerPrincipal) {
+        this.controllerPrincipal = controllerPrincipal;
+    }
 }

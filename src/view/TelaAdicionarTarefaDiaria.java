@@ -15,10 +15,11 @@ import java.util.Date;
 public class TelaAdicionarTarefaDiaria extends javax.swing.JFrame {
 
     private ControllerAdicionarTarefaDiaria controller = new ControllerAdicionarTarefaDiaria();
-    
-    public TelaAdicionarTarefaDiaria() {
+     
+    public TelaAdicionarTarefaDiaria(ControllerAdicionarTarefaDiaria controller) {
         initComponents();
         setLocationRelativeTo(null);
+        this.controller = controller;
         
         txfData.setEditor(new javax.swing.JSpinner.DateEditor(txfData, "dd/MM/yyyy"));
         txfData.setValue(new java.util.Date());

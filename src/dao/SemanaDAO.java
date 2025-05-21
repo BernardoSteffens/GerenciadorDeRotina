@@ -50,23 +50,31 @@ public class SemanaDAO {
         }
     }
      
-    public void adicionarSemana(){
+    public void adicionarSemana(){        
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         
-        String sql = "SELECT * FROM semanas ORDER BY dia_fim DESC LIMIT 1";
+        String sql = "SELECT * FROM semanas WHERE id = (SELECT seq FROM sqlite_sequence WHERE name = 'semanas')";
         
         try (Connection conn = ConexaoDB.getConexao();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql)) {
             
             LocalDate diaComeco;
-            
+
             if (rs.next()) {
                 String ultimoDiaFim = rs.getString("dia_fim");
                 LocalDate ultimaData = LocalDate.parse(ultimoDiaFim, formatter);
-                diaComeco = ultimaData.plusDays(1); 
+                diaComeco = ultimaData.plusDays(1);
+              
+                while (diaComeco.getDayOfWeek().getValue() != 7) {
+                    diaComeco = diaComeco.plusDays(1);
+                }
             } else {
                 diaComeco = LocalDate.now();
+                
+                while (diaComeco.getDayOfWeek().getValue() != 7) {
+                    diaComeco = diaComeco.minusDays(1);
+                }
             }
             
             LocalDate diaFim = diaComeco.plusDays(6);
@@ -75,11 +83,13 @@ public class SemanaDAO {
             novaSemana.setDiaComeco(diaComeco.format(formatter));
             novaSemana.setDiaFim(diaFim.format(formatter));
             
-            inserir(novaSemana);         
+            inserir(novaSemana);
             
         } catch (SQLException e) {
             ConexaoDB.rollback();
         }
+        
+
     }
 
     public boolean atualizar(Semana semana) throws SQLException {

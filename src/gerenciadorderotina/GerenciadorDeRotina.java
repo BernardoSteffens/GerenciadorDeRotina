@@ -17,7 +17,8 @@ public class GerenciadorDeRotina {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        ControllerPrincipal.exibirTela();
+        ControllerPrincipal controller = new ControllerPrincipal();
+        controller.exibirTela();
     }
     
 }

@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.logging.Level;
 import model.TarefaDiaria;
 import view.TelaEditarTarefaDiaria;
+import view.TelaTarefaDiaria;
 
 /**
  *
@@ -21,13 +22,13 @@ import view.TelaEditarTarefaDiaria;
 public class ControllerEditarTarefaDiaria {
     
     private static TarefaDiaria tarefa;
+    private TelaEditarTarefaDiaria tela;
+    private AtualizacaoTarefaDiariaListener listener;
     
-    public static void exibirTela(){
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new TelaEditarTarefaDiaria().setVisible(true);
-            }
-        }); 
+    public void exibirTela(){
+        TelaEditarTarefaDiaria telaEditarTarefaDiaria = new TelaEditarTarefaDiaria(this);
+        telaEditarTarefaDiaria.setVisible(true);
+        this.tela = telaEditarTarefaDiaria;     
     }
     
     public static void receberTarefaSelecionada(TarefaDiaria tarefaSelecionada){
@@ -38,7 +39,7 @@ public class ControllerEditarTarefaDiaria {
         return tarefa;
     }
     
-    public static Date stringParaDate(String dataString){
+    public Date stringParaDate(String dataString){
         SimpleDateFormat sdfData = new SimpleDateFormat("dd/MM/yyyy");   
         
         try {
@@ -49,7 +50,7 @@ public class ControllerEditarTarefaDiaria {
         return null;
     }
     
-     public static Date stringParaDateHora(String horaString){
+     public Date stringParaDateHora(String horaString){
         SimpleDateFormat sdfHora = new SimpleDateFormat("HH:mm");   
         
         try {
@@ -60,18 +61,16 @@ public class ControllerEditarTarefaDiaria {
         return null;
     }
 
-    public static void atualizarTarefaDiaria(int id, String titulo, String descricao, String data, int prioridade, String horaInicio, boolean concluida) {
+    public void atualizarTarefaDiaria(int id, String titulo, String descricao, String data, int prioridade, String horaInicio, boolean concluida) {
         TarefaDiaria tarefa = new TarefaDiaria(id, titulo, descricao, data, prioridade, horaInicio, concluida);
         TarefaDiariaDAO dao = new TarefaDiariaDAO();
-        ControllerPrincipal controllerTelaPrincipal = new ControllerPrincipal();
         
         try {
             dao.atualizar(tarefa);
         } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(ControllerAdicionarTarefaDiaria.class.getName()).log(Level.SEVERE, null, ex);
         }
-        //controllerTelaPrincipal.atualizarTarefasDoDia();
-        ControllerTarefaDiaria.atualizarPesquisa();
+        listener.atualizarLista();
     }
     
 }

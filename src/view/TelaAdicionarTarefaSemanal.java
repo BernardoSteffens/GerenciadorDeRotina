@@ -12,15 +12,13 @@ import controller.ControllerAdicionarTarefaSemanal;
  */
 public class TelaAdicionarTarefaSemanal extends javax.swing.JFrame {
 
-    ControllerAdicionarTarefaSemanal controller = new ControllerAdicionarTarefaSemanal();
+    ControllerAdicionarTarefaSemanal controller;
     
-    public TelaAdicionarTarefaSemanal() {
+    public TelaAdicionarTarefaSemanal(ControllerAdicionarTarefaSemanal controller) {
         initComponents();
         setLocationRelativeTo(null);
-
+        this.controller = controller;
     }
-
-    
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents

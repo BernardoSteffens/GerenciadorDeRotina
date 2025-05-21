@@ -19,13 +19,10 @@ public class ControllerAdicionarTarefaSemanal {
     
     private TarefaSemanalDAO dao = new TarefaSemanalDAO();
     private static int idSemana;
+    private TelaAdicionarTarefaSemanal tela;
     
-    public static void exibirTela(){
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new TelaAdicionarTarefaSemanal().setVisible(true);
-            }
-        });
+    public void exibirTela(){
+        new TelaAdicionarTarefaSemanal(this).setVisible(true);
     }
     
     public void receberIdSemana(int id){
@@ -33,7 +30,6 @@ public class ControllerAdicionarTarefaSemanal {
     }
     
     public void adicionarTarefaSemanal(String titulo, String descricao, int prioridade, Boolean concluida){
-        System.out.println("Controller adicionar: " + idSemana);
         TarefaSemanal tarefa = new TarefaSemanal(titulo, descricao, prioridade, concluida, idSemana);
         
         try {

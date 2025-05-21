@@ -16,17 +16,20 @@ import model.TarefaDiaria;
 public class TelaEditarTarefaDiaria extends javax.swing.JFrame {
     
     TarefaDiaria tarefa = ControllerEditarTarefaDiaria.getTarefa();
+    ControllerEditarTarefaDiaria controller;
     
-    public TelaEditarTarefaDiaria() {
+    public TelaEditarTarefaDiaria(ControllerEditarTarefaDiaria controller) {
         initComponents();
         setLocationRelativeTo(null);
+        this.controller = controller;
+        
         txfData.setEditor(new javax.swing.JSpinner.DateEditor(txfData, "dd/MM/yyyy"));
         txfData.setValue(new java.util.Date());
         
         spnHoraInicio.setEditor(new javax.swing.JSpinner.DateEditor(spnHoraInicio, "HH:mm"));
         txfTitulo.setText(tarefa.getTitulo());
-        txfData.setValue(ControllerEditarTarefaDiaria.stringParaDate(tarefa.getData()));
-        spnHoraInicio.setValue(ControllerEditarTarefaDiaria.stringParaDateHora(tarefa.getHoraInicio()));
+        txfData.setValue(controller.stringParaDate(tarefa.getData()));
+        spnHoraInicio.setValue(controller.stringParaDateHora(tarefa.getHoraInicio()));
         txfDescricao.setText(tarefa.getDescricao());
         spnPrioridade.setValue(tarefa.getPrioridade());
         cbConcluida.setSelected(tarefa.isConcluida());
@@ -210,7 +213,7 @@ public class TelaEditarTarefaDiaria extends javax.swing.JFrame {
         formato = new SimpleDateFormat("HH:mm");
         String horaInicio = formato.format(spnHoraInicio.getValue());
         
-        ControllerEditarTarefaDiaria.atualizarTarefaDiaria(id,titulo, descricao, data, prioridade, horaInicio, concluida);
+        controller.atualizarTarefaDiaria(id,titulo, descricao, data, prioridade, horaInicio, concluida);
         this.dispose();
     }//GEN-LAST:event_btnSalvarActionPerformed
 

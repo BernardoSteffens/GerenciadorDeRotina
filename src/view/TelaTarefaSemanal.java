@@ -18,13 +18,15 @@ import model.TarefaSemanal;
  */
 public class TelaTarefaSemanal extends javax.swing.JFrame {
 
-    private ControllerTarefaSemanal controller = new ControllerTarefaSemanal();
+    private ControllerTarefaSemanal controller;
     private List<Semana> semanas;
     private int idSemana;
     
-    public TelaTarefaSemanal() {
+    public TelaTarefaSemanal(ControllerTarefaSemanal controller) {
         initComponents();
         setLocationRelativeTo(null);
+        
+        this.controller = controller;
 
         this.addWindowListener(new WindowAdapter() {
             @Override
@@ -63,6 +65,8 @@ public class TelaTarefaSemanal extends javax.swing.JFrame {
     }
     
     private void atualizarSemanas(){
+        cbSemanas.removeAllItems();
+
         semanas = controller.listarSemanas();
         for(Semana semana : semanas){
             cbSemanas.addItem(semana.toString());
@@ -97,6 +101,7 @@ public class TelaTarefaSemanal extends javax.swing.JFrame {
         btnAdicionar = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblResultados = new javax.swing.JTable();
+        btnTarefaDiaria = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Gerenciador de Rotina - Tarefas Semanais");
@@ -166,6 +171,13 @@ public class TelaTarefaSemanal extends javax.swing.JFrame {
         ));
         jScrollPane2.setViewportView(tblResultados);
 
+        btnTarefaDiaria.setText("Gerar Tarefa Diária");
+        btnTarefaDiaria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTarefaDiariaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -173,14 +185,17 @@ public class TelaTarefaSemanal extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 833, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 833, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(34, 34, 34)
-                        .addComponent(btnAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel1))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 833, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 833, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(28, 28, 28)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnAdicionar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnTarefaDiaria, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -195,7 +210,9 @@ public class TelaTarefaSemanal extends javax.swing.JFrame {
                         .addComponent(btnAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(6, 6, 6)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnTarefaDiaria, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(35, Short.MAX_VALUE))
         );
 
@@ -213,9 +230,16 @@ public class TelaTarefaSemanal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAdicionarSemanaActionPerformed
 
     private void cbSemanasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSemanasActionPerformed
-        idSemana = semanas.get(cbSemanas.getSelectedIndex()).getId();
+        if(cbSemanas.getSelectedItem() != null){
+            idSemana = semanas.get(cbSemanas.getSelectedIndex()).getId();
+        } 
+        
         atualizarTarefas();
     }//GEN-LAST:event_cbSemanasActionPerformed
+
+    private void btnTarefaDiariaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTarefaDiariaActionPerformed
+        
+    }//GEN-LAST:event_btnTarefaDiariaActionPerformed
 
     private void fecharTela() {
         this.dispose();
@@ -224,6 +248,7 @@ public class TelaTarefaSemanal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdicionar;
     private javax.swing.JButton btnAdicionarSemana;
+    private javax.swing.JButton btnTarefaDiaria;
     private javax.swing.JComboBox<String> cbSemanas;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

@@ -17,13 +17,13 @@ import model.TarefaDiaria;
  */
 public class TelaPrincipal extends javax.swing.JFrame {
 
-    private ControllerPrincipal controller = new ControllerPrincipal();
+    private ControllerPrincipal controller;
     private List<TarefaDiaria> tarefas;
     
-    public TelaPrincipal() {
+    public TelaPrincipal(ControllerPrincipal controller) {
         initComponents();
+        this.controller = controller;
         setLocationRelativeTo(null);
-        ControllerPrincipal controller = new ControllerPrincipal();
         
         DefaultTableModel modelo = new DefaultTableModel(new Object[]{"Título", "Concluida"},0) {
             @Override

@@ -26,8 +26,9 @@ public class TelaTarefaDiaria extends javax.swing.JFrame {
     private ControllerTarefaDiaria controller = new ControllerTarefaDiaria();
     private List<TarefaDiaria> tarefas;
 
-    public TelaTarefaDiaria() {
+    public TelaTarefaDiaria(ControllerTarefaDiaria controller) {
         initComponents();
+        this.controller = controller;
         
         this.addWindowListener(new WindowAdapter() {
             @Override
@@ -346,6 +347,35 @@ public class TelaTarefaDiaria extends javax.swing.JFrame {
     }//GEN-LAST:event_btnExcluirActionPerformed
 
     private void btnPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarActionPerformed
+        pesquisar();
+    }//GEN-LAST:event_btnPesquisarActionPerformed
+
+    private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
+        txfTitulo.setText("");
+        spnData.setValue(new java.util.Date());
+        spnPrioridade.setValue(0);
+        cbConcluida.setSelectedIndex(0);
+        btnPesquisar.doClick();
+    }//GEN-LAST:event_btnLimparActionPerformed
+
+    private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
+        controller.abrirTelaAdicionarTarefaDiaria();
+    }//GEN-LAST:event_btnAdicionarActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        int linhaSelecionada = tblResultados.getSelectedRow();
+        
+        if(linhaSelecionada != -1){
+            TarefaDiaria tarefaSelecionada = tarefas.get(linhaSelecionada);
+            controller.abrirTelaEditarTarefaDiaria(tarefaSelecionada);
+        }
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void tblResultadosPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_tblResultadosPropertyChange
+        
+    }//GEN-LAST:event_tblResultadosPropertyChange
+    
+    public void pesquisar(){
         String titulo = null;
         String data = null;
         int prioridade = -1;
@@ -383,39 +413,10 @@ public class TelaTarefaDiaria extends javax.swing.JFrame {
                 tarefa.isConcluida()
             });
         }
-    }//GEN-LAST:event_btnPesquisarActionPerformed
-
-    private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
-        txfTitulo.setText("");
-        spnData.setValue(new java.util.Date());
-        spnPrioridade.setValue(0);
-        cbConcluida.setSelectedIndex(0);
-        btnPesquisar.doClick();
-    }//GEN-LAST:event_btnLimparActionPerformed
-
-    private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
-        controller.abrirTelaAdicionarTarefaDiaria();
-    }//GEN-LAST:event_btnAdicionarActionPerformed
-
-    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        int linhaSelecionada = tblResultados.getSelectedRow();
-        
-        if(linhaSelecionada != -1){
-            TarefaDiaria tarefaSelecionada = tarefas.get(linhaSelecionada);
-            controller.abrirTelaEditarTarefaDiaria(tarefaSelecionada);
-        }
-    }//GEN-LAST:event_btnEditarActionPerformed
-
-    private void tblResultadosPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_tblResultadosPropertyChange
-        
-    }//GEN-LAST:event_tblResultadosPropertyChange
+    }
     
     private void fecharTela(){
         this.dispose();
-    }
-    
-    public void atualizarPesquisa(){
-        btnPesquisar.doClick();
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
