@@ -24,6 +24,7 @@ public class ControllerTarefaSemanal {
     private TelaTarefaSemanal tela;
     private ControllerPrincipal controllerPrincipal;
     private ControllerAdicionarTarefaSemanal controllerAdicionar = new ControllerAdicionarTarefaSemanal();
+    private ControllerEditarTarefaSemanal controllerEditar = new ControllerEditarTarefaSemanal();
 
     public void exibirTela(){
         TelaTarefaSemanal telaTarefaSemanal = new TelaTarefaSemanal(this);
@@ -75,5 +76,10 @@ public class ControllerTarefaSemanal {
 
     public void setControllerPrincipal(ControllerPrincipal controllerPrincipal) {
         this.controllerPrincipal = controllerPrincipal;
+    }
+
+    public void abrirTelaEditarTarefaSemanal(TarefaSemanal tarefaSelecionada) {
+        controllerEditar.setTarefa(tarefaSelecionada);
+        controllerEditar.exibirTela();
     }
 }

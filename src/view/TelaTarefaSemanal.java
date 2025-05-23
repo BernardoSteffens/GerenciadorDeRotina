@@ -21,6 +21,7 @@ public class TelaTarefaSemanal extends javax.swing.JFrame {
     private ControllerTarefaSemanal controller;
     private List<Semana> semanas;
     private int idSemana;
+    private List<TarefaSemanal> tarefas;
     
     public TelaTarefaSemanal(ControllerTarefaSemanal controller) {
         initComponents();
@@ -74,7 +75,7 @@ public class TelaTarefaSemanal extends javax.swing.JFrame {
     }
     
     private void atualizarTarefas(){
-        List<TarefaSemanal> tarefas = controller.listarTarefasSemanais(idSemana);
+        tarefas = controller.listarTarefasSemanais(idSemana);
         
         DefaultTableModel modelo = (DefaultTableModel) tblResultados.getModel();
         modelo.setRowCount(0);
@@ -102,6 +103,7 @@ public class TelaTarefaSemanal extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         tblResultados = new javax.swing.JTable();
         btnTarefaDiaria = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Gerenciador de Rotina - Tarefas Semanais");
@@ -178,6 +180,14 @@ public class TelaTarefaSemanal extends javax.swing.JFrame {
             }
         });
 
+        btnEditar.setText("Editar");
+        btnEditar.setPreferredSize(new java.awt.Dimension(142, 40));
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -195,7 +205,8 @@ public class TelaTarefaSemanal extends javax.swing.JFrame {
                         .addGap(28, 28, 28)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(btnAdicionar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnTarefaDiaria, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(btnTarefaDiaria, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnEditar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -212,7 +223,10 @@ public class TelaTarefaSemanal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnTarefaDiaria, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnTarefaDiaria, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(35, Short.MAX_VALUE))
         );
 
@@ -241,6 +255,15 @@ public class TelaTarefaSemanal extends javax.swing.JFrame {
         
     }//GEN-LAST:event_btnTarefaDiariaActionPerformed
 
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        int linhaSelecionada = tblResultados.getSelectedRow();
+        
+        if(linhaSelecionada != -1){
+            TarefaSemanal tarefaSelecionada = tarefas.get(linhaSelecionada);
+            controller.abrirTelaEditarTarefaSemanal(tarefaSelecionada);
+        }
+    }//GEN-LAST:event_btnEditarActionPerformed
+
     private void fecharTela() {
         this.dispose();
     }
@@ -248,6 +271,7 @@ public class TelaTarefaSemanal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdicionar;
     private javax.swing.JButton btnAdicionarSemana;
+    private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnTarefaDiaria;
     private javax.swing.JComboBox<String> cbSemanas;
     private javax.swing.JLabel jLabel1;

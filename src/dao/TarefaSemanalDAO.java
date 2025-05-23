@@ -86,7 +86,6 @@ public class TarefaSemanalDAO {
             stmt.setString(2, tarefa.getDescricao());
             stmt.setInt(3, tarefa.getPrioridade());
             stmt.setInt(4, tarefa.isConcluida() ? 1 : 0);
-            stmt.setInt(7, tarefa.isConcluida() ? 1 : 0);
             
             if (tarefa.getCategoriaId() > 0) {
                 stmt.setInt(5, tarefa.getCategoriaId());
@@ -99,8 +98,8 @@ public class TarefaSemanalDAO {
             } else {
                 stmt.setNull(6, java.sql.Types.INTEGER);
             }
-            
-            stmt.setInt(9, tarefa.getId());
+            stmt.setInt(7, tarefa.getSemanaId());
+            stmt.setInt(8, tarefa.getId());
             
             int resultado = stmt.executeUpdate();
             ConexaoDB.commit();

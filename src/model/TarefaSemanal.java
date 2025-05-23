@@ -33,6 +33,15 @@ public class TarefaSemanal {
         this.concluida = concluida;
         this.semanaId = semanaId;
     }
+
+    public TarefaSemanal(int id, String titulo, String descricao, int prioridade, boolean concluida, int idSemana) {
+        this.id = id;
+        this.titulo = titulo;
+        this.descricao = descricao;
+        this.prioridade = prioridade;
+        this.concluida = concluida;
+        this.semanaId = idSemana;
+    }
     
     public int getId() {
         return id;

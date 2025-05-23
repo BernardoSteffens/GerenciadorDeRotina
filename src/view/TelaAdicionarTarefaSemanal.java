@@ -12,7 +12,7 @@ import controller.ControllerAdicionarTarefaSemanal;
  */
 public class TelaAdicionarTarefaSemanal extends javax.swing.JFrame {
 
-    ControllerAdicionarTarefaSemanal controller;
+    private ControllerAdicionarTarefaSemanal controller;
     
     public TelaAdicionarTarefaSemanal(ControllerAdicionarTarefaSemanal controller) {
         initComponents();
@@ -79,8 +79,8 @@ public class TelaAdicionarTarefaSemanal extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(31, 31, 31)
+                                .addComponent(txtTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
                                 .addComponent(jLabel3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(spnPrioridade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
