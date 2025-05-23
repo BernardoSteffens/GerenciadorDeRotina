@@ -82,4 +82,14 @@ public class ControllerTarefaSemanal {
         controllerEditar.setTarefa(tarefaSelecionada);
         controllerEditar.exibirTela();
     }
+
+    public void excluirEditarTarefaSemanal(TarefaSemanal tarefaSelecionada) {
+        int id = tarefaSelecionada.getId();
+        
+        try {
+            tarefaSemanalDao.deletar(id);
+        } catch (SQLException ex) {
+            Logger.getLogger(ControllerTarefaSemanal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }
