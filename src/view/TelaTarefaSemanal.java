@@ -1,13 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package view;
 
 import controller.ControllerTarefaSemanal;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.List;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import model.Semana;
 import model.TarefaSemanal;
@@ -44,6 +42,7 @@ public class TelaTarefaSemanal extends javax.swing.JFrame {
         btnTarefaDiaria.setEnabled(false);
         atualizarSemanas();
         inicializarTabela();
+        atualizarTarefas();
     }
 
     private void inicializarTabela(){
@@ -66,19 +65,34 @@ public class TelaTarefaSemanal extends javax.swing.JFrame {
             }
         };
         
+        tabela.addTableModelListener(new TableModelListener(){
+            
+            public void tableChanged(TableModelEvent e){
+                int row = e.getFirstRow();
+                int column = e.getColumn();
+                
+                if (column == 3 && e.getType() == TableModelEvent.UPDATE) {
+                    Boolean concluida = (Boolean) tabela.getValueAt(row, column);
+                    int linhaSelecionada = tblResultados.getSelectedRow();
+                    
+                    TarefaSemanal tarefaAlterada = tarefas.get(linhaSelecionada);
+                    controller.atualizarConcluidaTarefa(tarefaAlterada, concluida);
+                }
+            }
+        });
+        
         tblResultados.setModel(tabela);
     }
     
     private void atualizarSemanas(){
         cbSemanas.removeAllItems();
-
         semanas = controller.listarSemanas();
         for(Semana semana : semanas){
             cbSemanas.addItem(semana.toString());
         }
     }
     
-    private void atualizarTarefas(){
+    public void atualizarTarefas(){
         tarefas = controller.listarTarefasSemanais(idSemana);
         
         DefaultTableModel modelo = (DefaultTableModel) tblResultados.getModel();
@@ -259,7 +273,7 @@ public class TelaTarefaSemanal extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+   
     private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
         controller.abrirTelaAdicionar();
         controller.setIdSemana(idSemana);
@@ -298,6 +312,7 @@ public class TelaTarefaSemanal extends javax.swing.JFrame {
             TarefaSemanal tarefaSelecionada = tarefas.get(linhaSelecionada);
             controller.excluirEditarTarefaSemanal(tarefaSelecionada);
         }
+        atualizarTarefas();
     }//GEN-LAST:event_btnExcluirActionPerformed
 
     private void jScrollPane2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jScrollPane2MouseClicked

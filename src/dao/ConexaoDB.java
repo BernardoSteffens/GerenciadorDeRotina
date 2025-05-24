@@ -22,8 +22,6 @@ public class ConexaoDB {
                 
                 conexao.setAutoCommit(false);
                 
-                System.out.println("Conexão com SQLite estabelecida com sucesso!");
-                
                 criarTabelas();
                 
             } catch (ClassNotFoundException e) {
@@ -105,7 +103,6 @@ public class ConexaoDB {
                     ")");
             
             conexao.commit();
-            System.out.println("Tabelas criadas com sucesso!");
             
         } catch (SQLException e) {
             if (conexao != null) {
@@ -120,7 +117,6 @@ public class ConexaoDB {
         try {
             if (conexao != null && !conexao.isClosed()) {
                 conexao.close();
-                System.out.println("Conexão com SQLite fechada com sucesso!");
             }
         } catch (SQLException e) {
             System.err.println("Erro ao fechar conexão com SQLite: " + e.getMessage());

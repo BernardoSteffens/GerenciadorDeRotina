@@ -30,7 +30,6 @@ public class TarefaSemanalDAO {
             stmt.setInt(3, tarefa.getPrioridade());
             stmt.setInt(4, tarefa.isConcluida() ? 1 : 0);
             stmt.setInt(7, tarefa.getSemanaId());
-            System.out.println(tarefa.getSemanaId());
             
             if (tarefa.getCategoriaId() > 0) {
                 stmt.setInt(5, tarefa.getCategoriaId());

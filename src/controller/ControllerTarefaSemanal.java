@@ -15,12 +15,11 @@ import view.TelaTarefaSemanal;
  *
  * @author Bernardo
  */
-public class ControllerTarefaSemanal {
+public class ControllerTarefaSemanal implements AtualizacaoTarefaSemanalListener{
     
     private int idSemana;
     private SemanaDAO semanaDao = new SemanaDAO();
     private TarefaSemanalDAO tarefaSemanalDao = new TarefaSemanalDAO();
-    private ControllerAdicionarTarefaSemanal controller = new ControllerAdicionarTarefaSemanal();
     private TelaTarefaSemanal tela;
     private ControllerPrincipal controllerPrincipal;
     private ControllerAdicionarTarefaSemanal controllerAdicionar = new ControllerAdicionarTarefaSemanal();
@@ -66,7 +65,8 @@ public class ControllerTarefaSemanal {
     }
 
     public void abrirTelaAdicionar() {
-        controller.receberIdSemana(idSemana);
+        controllerAdicionar.setListener(this);
+        controllerAdicionar.receberIdSemana(idSemana);
         controllerAdicionar.exibirTela();
     }
 
@@ -79,6 +79,7 @@ public class ControllerTarefaSemanal {
     }
 
     public void abrirTelaEditarTarefaSemanal(TarefaSemanal tarefaSelecionada) {
+        controllerEditar.setListener(this);
         controllerEditar.setTarefa(tarefaSelecionada);
         controllerEditar.exibirTela();
     }
@@ -90,6 +91,21 @@ public class ControllerTarefaSemanal {
             tarefaSemanalDao.deletar(id);
         } catch (SQLException ex) {
             Logger.getLogger(ControllerTarefaSemanal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Override
+    public void atualizarLista() {
+        tela.atualizarTarefas();
+    }
+
+    public void atualizarConcluidaTarefa(TarefaSemanal tarefaAlterada, Boolean concluida) {
+        tarefaAlterada.setConcluida(concluida);
+        
+        try {
+            tarefaSemanalDao.atualizar(tarefaAlterada);
+        } catch (SQLException ex) {
+            Logger.getLogger(ControllerTarefaDiaria.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

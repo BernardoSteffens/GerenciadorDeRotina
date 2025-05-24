@@ -20,6 +20,8 @@ public class ControllerAdicionarTarefaSemanal {
     private TarefaSemanalDAO dao = new TarefaSemanalDAO();
     private static int idSemana;
     private TelaAdicionarTarefaSemanal tela;
+    private AtualizacaoTarefaSemanalListener listener;
+
     
     public void exibirTela(){
         new TelaAdicionarTarefaSemanal(this).setVisible(true);
@@ -37,5 +39,10 @@ public class ControllerAdicionarTarefaSemanal {
         } catch (SQLException ex) {
             Logger.getLogger(ControllerAdicionarTarefaSemanal.class.getName()).log(Level.SEVERE, null, ex);
         }
+        listener.atualizarLista();
+    }
+
+    public void setListener(AtualizacaoTarefaSemanalListener listener) {
+        this.listener = listener;
     }
 }
